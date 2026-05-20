@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J-COMBIEN AVANT LE RICARD ?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Monoton&family=Rubik+Mono+One&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --hot-pink: #ff2d95;
+    --cyan: #00e5ff;
+    --yellow: #ffe600;
+    --purple: #8a2be2;
+    --orange: #ff7a00;
+    --cream: #fff8e7;
+    --ink: #1a1a2e;
+    --ricard: #f4d03f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: 'Space Mono', monospace;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    position: relative;
+    background-image:
+      linear-gradient(var(--ink) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ink) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: -1px -1px;
+    background-color: var(--cream);
+  }
+
+  /* Squiggles & memphis shapes en fond */
+  .memphis-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .squiggle, .triangle, .dot-pattern, .zigzag {
+    position: absolute;
+    opacity: 0.85;
+  }
+
+  .squiggle-1 { top: 8%; right: 5%; width: 120px; height: 60px; }
+  .squiggle-2 { bottom: 12%; left: 4%; width: 140px; height: 70px; }
+  .triangle-1 { top: 15%; left: 8%; width: 80px; height: 80px; animation: spin 18s linear infinite; }
+  .triangle-2 { bottom: 20%; right: 10%; width: 60px; height: 60px; animation: spin 12s linear infinite reverse; }
+  .dot-pattern-1 { top: 40%; right: 3%; width: 100px; height: 100px; }
+  .dot-pattern-2 { bottom: 5%; left: 30%; width: 80px; height: 80px; }
+  .zigzag-1 { top: 55%; left: 2%; width: 100px; height: 30px; }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 2;
+    padding: 30px 20px 10px;
+    text-align: center;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--ricard);
+    padding: 8px 18px;
+    font-family: 'Bungee', cursive;
+    font-size: 13px;
+    letter-spacing: 2px;
+    transform: rotate(-2deg);
+    box-shadow: 5px 5px 0 var(--hot-pink);
+    margin-bottom: 25px;
+  }
+
+  h1 {
+    font-family: 'Monoton', cursive;
+    font-size: clamp(2.5rem, 9vw, 6rem);
+    line-height: 0.95;
+    color: var(--ink);
+    text-shadow:
+      3px 3px 0 var(--hot-pink),
+      6px 6px 0 var(--cyan),
+      9px 9px 0 var(--yellow);
+    margin: 10px 0;
+    letter-spacing: 2px;
+  }
+
+  .subtitle {
+    font-family: 'Rubik Mono One', sans-serif;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--ink);
+    margin-top: 20px;
+    background: var(--yellow);
+    display: inline-block;
+    padding: 8px 18px;
+    transform: rotate(1deg);
+    border: 3px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  /* COUNTDOWN */
+  .countdown-section {
+    position: relative;
+    z-index: 2;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: clamp(8px, 2vw, 20px);
+    flex-wrap: wrap;
+    margin: 20px auto;
+    max-width: 900px;
+  }
+
+  .time-box {
+    background: var(--cream);
+    border: 4px solid var(--ink);
+    padding: 18px 12px;
+    min-width: clamp(80px, 18vw, 160px);
+    box-shadow: 6px 6px 0 var(--ink);
+    position: relative;
+  }
+
+  .time-box:nth-child(1) { background: var(--hot-pink); color: var(--cream); }
+  .time-box:nth-child(2) { background: var(--cyan); }
+  .time-box:nth-child(3) { background: var(--yellow); }
+  .time-box:nth-child(4) { background: var(--orange); color: var(--cream); }
+
+  .time-num {
+    font-family: 'Bungee', cursive;
+    font-size: clamp(2rem, 7vw, 4rem);
+    line-height: 1;
+    display: block;
+  }
+
+  .time-label {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 8px;
+  }
+
+  .target-info {
+    margin-top: 30px;
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: var(--ink);
+    background: var(--cream);
+    display: inline-block;
+    padding: 10px 20px;
+    border: 3px dashed var(--ink);
+  }
+
+  /* SCENE PRINCIPALE - illustration */
+  .scene-wrapper {
+    position: relative;
+    z-index: 2;
+    margin: 40px auto;
+    max-width: 1100px;
+    padding: 0 20px;
+  }
+
+  .scene {
+    background: var(--ink);
+    border: 6px solid var(--ink);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 12px 12px 0 var(--hot-pink);
+  }
+
+  .scene svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* CARTE INFOS */
+  .info-card {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 0 20px;
+  }
+
+  .card {
+    background: var(--cream);
+    border: 4px solid var(--ink);
+    padding: 35px 30px;
+    box-shadow: 10px 10px 0 var(--cyan);
+    position: relative;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    top: -15px;
+    left: 30px;
+    background: var(--hot-pink);
+    color: var(--cream);
+    font-family: 'Bungee', cursive;
+    padding: 6px 14px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    content: "★ PROGRAMME ★";
+    border: 3px solid var(--ink);
+  }
+
+  .card h2 {
+    font-family: 'Bungee', cursive;
+    font-size: clamp(1.3rem, 3vw, 2rem);
+    margin: 20px 0 15px;
+    color: var(--ink);
+  }
+
+  .crew {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 25px 0;
+  }
+
+  .crew-item {
+    background: var(--yellow);
+    border: 3px solid var(--ink);
+    padding: 12px;
+    text-align: center;
+    box-shadow: 4px 4px 0 var(--ink);
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+  }
+
+  .crew-item:nth-child(2n) { background: var(--cyan); }
+  .crew-item:nth-child(3n) { background: var(--hot-pink); color: var(--cream); }
+
+  .crew-num {
+    font-family: 'Bungee', cursive;
+    font-size: 2rem;
+    display: block;
+    line-height: 1;
+  }
+
+  .crew-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 5px;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 40px 20px 60px;
+    font-family: 'Space Mono', monospace;
+    color: var(--ink);
+  }
+
+  .footer-stamp {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--ricard);
+    padding: 12px 22px;
+    font-family: 'Bungee', cursive;
+    letter-spacing: 3px;
+    transform: rotate(-1deg);
+    border: 3px solid var(--ricard);
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+  }
+
+  .small-print {
+    margin-top: 20px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    letter-spacing: 1px;
+  }
+
+  /* Pulse au moment magique */
+  @keyframes party-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .party-mode .time-box {
+    animation: party-pulse 0.6s infinite;
+  }
+
+  .party-banner {
+    display: none;
+    font-family: 'Monoton', cursive;
+    font-size: clamp(2rem, 8vw, 5rem);
+    color: var(--hot-pink);
+    text-shadow: 3px 3px 0 var(--cyan), 6px 6px 0 var(--yellow);
+    margin: 20px 0;
+  }
+
+  .party-mode .party-banner {
+    display: block;
+    animation: party-pulse 0.6s infinite;
+  }
+
+  .party-mode .countdown { opacity: 0.3; }
+</style>
+</head>
+<body>
+
+  <!-- Décor Memphis en fond -->
+  <div class="memphis-bg">
+    <svg class="squiggle squiggle-1" viewBox="0 0 120 60">
+      <path d="M5,30 Q20,5 35,30 T65,30 T95,30 T115,30" stroke="#ff2d95" stroke-width="6" fill="none" stroke-linecap="round"/>
+    </svg>
+    <svg class="squiggle squiggle-2" viewBox="0 0 140 70">
+      <path d="M5,35 Q25,5 45,35 T85,35 T125,35" stroke="#00e5ff" stroke-width="7" fill="none" stroke-linecap="round"/>
+    </svg>
+    <svg class="triangle triangle-1" viewBox="0 0 80 80">
+      <polygon points="40,5 75,70 5,70" fill="none" stroke="#ffe600" stroke-width="5"/>
+      <polygon points="40,20 65,62 15,62" fill="#ff7a00"/>
+    </svg>
+    <svg class="triangle triangle-2" viewBox="0 0 60 60">
+      <polygon points="30,5 55,50 5,50" fill="#8a2be2"/>
+    </svg>
+    <svg class="dot-pattern dot-pattern-1" viewBox="0 0 100 100">
+      <g fill="#ff2d95">
+        <circle cx="10" cy="10" r="5"/><circle cx="30" cy="10" r="5"/><circle cx="50" cy="10" r="5"/><circle cx="70" cy="10" r="5"/><circle cx="90" cy="10" r="5"/>
+        <circle cx="10" cy="30" r="5"/><circle cx="30" cy="30" r="5"/><circle cx="50" cy="30" r="5"/><circle cx="70" cy="30" r="5"/><circle cx="90" cy="30" r="5"/>
+        <circle cx="10" cy="50" r="5"/><circle cx="30" cy="50" r="5"/><circle cx="50" cy="50" r="5"/><circle cx="70" cy="50" r="5"/><circle cx="90" cy="50" r="5"/>
+        <circle cx="10" cy="70" r="5"/><circle cx="30" cy="70" r="5"/><circle cx="50" cy="70" r="5"/><circle cx="70" cy="70" r="5"/><circle cx="90" cy="70" r="5"/>
+        <circle cx="10" cy="90" r="5"/><circle cx="30" cy="90" r="5"/><circle cx="50" cy="90" r="5"/><circle cx="70" cy="90" r="5"/><circle cx="90" cy="90" r="5"/>
+      </g>
+    </svg>
+    <svg class="dot-pattern dot-pattern-2" viewBox="0 0 80 80">
+      <g fill="#00e5ff">
+        <circle cx="10" cy="10" r="4"/><circle cx="30" cy="10" r="4"/><circle cx="50" cy="10" r="4"/><circle cx="70" cy="10" r="4"/>
+        <circle cx="10" cy="30" r="4"/><circle cx="30" cy="30" r="4"/><circle cx="50" cy="30" r="4"/><circle cx="70" cy="30" r="4"/>
+        <circle cx="10" cy="50" r="4"/><circle cx="30" cy="50" r="4"/><circle cx="50" cy="50" r="4"/><circle cx="70" cy="50" r="4"/>
+        <circle cx="10" cy="70" r="4"/><circle cx="30" cy="70" r="4"/><circle cx="50" cy="70" r="4"/><circle cx="70" cy="70" r="4"/>
+      </g>
+    </svg>
+    <svg class="zigzag zigzag-1" viewBox="0 0 100 30">
+      <polyline points="0,15 15,5 30,25 45,5 60,25 75,5 90,25 100,15" stroke="#8a2be2" stroke-width="5" fill="none" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <header>
+    <div class="tag">◆ LENTILLY 2026 ◆</div>
+    <h1>J — COMBIEN<br>AVANT LE RICARD ?</h1>
+    <div class="subtitle">★ VENDREDI 22 MAI · 20H00 PILE ★</div>
+  </header>
+
+  <section class="countdown-section">
+    <div class="party-banner">SANTÉ LES COPAINS !</div>
+    <div class="countdown" id="countdown">
+      <div class="time-box"><span class="time-num" id="days">--</span><span class="time-label">Jours</span></div>
+      <div class="time-box"><span class="time-num" id="hours">--</span><span class="time-label">Heures</span></div>
+      <div class="time-box"><span class="time-num" id="minutes">--</span><span class="time-label">Minutes</span></div>
+      <div class="time-box"><span class="time-num" id="seconds">--</span><span class="time-label">Secondes</span></div>
+    </div>
+    <div class="target-info">⏰ Avant le tintement glacé du Ricard bien frais</div>
+  </section>
+
+  <!-- ILLUSTRATION PRINCIPALE -->
+  <div class="scene-wrapper">
+    <div class="scene">
+      <svg viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg">
+        <!-- CIEL avec dégradé coucher de soleil 90s -->
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ff2d95"/>
+            <stop offset="40%" stop-color="#ff7a00"/>
+            <stop offset="80%" stop-color="#ffe600"/>
+            <stop offset="100%" stop-color="#fff8e7"/>
+          </linearGradient>
+          <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#00e5ff"/>
+            <stop offset="100%" stop-color="#0077b6"/>
+          </linearGradient>
+          <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stop-color="#ffe600"/>
+            <stop offset="60%" stop-color="#ff7a00"/>
+            <stop offset="100%" stop-color="#ff2d95"/>
+          </radialGradient>
+          <linearGradient id="ricardGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fff8e7"/>
+            <stop offset="100%" stop-color="#f4d03f"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Ciel -->
+        <rect x="0" y="0" width="1000" height="340" fill="url(#sky)"/>
+
+        <!-- Soleil 90s avec bandes -->
+        <circle cx="500" cy="220" r="120" fill="url(#sun)"/>
+        <rect x="380" y="240" width="240" height="8" fill="#1a1a2e"/>
+        <rect x="380" y="260" width="240" height="6" fill="#1a1a2e"/>
+        <rect x="380" y="278" width="240" height="5" fill="#1a1a2e"/>
+        <rect x="380" y="294" width="240" height="4" fill="#1a1a2e"/>
+        <rect x="380" y="308" width="240" height="3" fill="#1a1a2e"/>
+
+        <!-- Palmiers -->
+        <g>
+          <!-- Tronc gauche -->
+          <path d="M 90 340 Q 95 250 100 180" stroke="#1a1a2e" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <!-- Feuilles -->
+          <ellipse cx="80" cy="170" rx="40" ry="10" fill="#1a1a2e" transform="rotate(-30 80 170)"/>
+          <ellipse cx="130" cy="170" rx="40" ry="10" fill="#1a1a2e" transform="rotate(30 130 170)"/>
+          <ellipse cx="60" cy="185" rx="42" ry="9" fill="#1a1a2e" transform="rotate(-55 60 185)"/>
+          <ellipse cx="150" cy="185" rx="42" ry="9" fill="#1a1a2e" transform="rotate(55 150 185)"/>
+          <ellipse cx="100" cy="160" rx="10" ry="35" fill="#1a1a2e"/>
+          <!-- Noix de coco -->
+          <circle cx="95" cy="190" r="6" fill="#1a1a2e"/>
+          <circle cx="108" cy="192" r="6" fill="#1a1a2e"/>
+        </g>
+
+        <g>
+          <!-- Palmier droit -->
+          <path d="M 920 340 Q 915 250 910 180" stroke="#1a1a2e" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <ellipse cx="880" cy="170" rx="40" ry="10" fill="#1a1a2e" transform="rotate(-30 880 170)"/>
+          <ellipse cx="940" cy="170" rx="40" ry="10" fill="#1a1a2e" transform="rotate(30 940 170)"/>
+          <ellipse cx="858" cy="185" rx="42" ry="9" fill="#1a1a2e" transform="rotate(-55 858 185)"/>
+          <ellipse cx="960" cy="185" rx="42" ry="9" fill="#1a1a2e" transform="rotate(55 960 185)"/>
+          <ellipse cx="910" cy="160" rx="10" ry="35" fill="#1a1a2e"/>
+        </g>
+
+        <!-- Nuages stylisés -->
+        <g fill="#fff8e7" opacity="0.9">
+          <ellipse cx="200" cy="100" rx="50" ry="14"/>
+          <ellipse cx="220" cy="95" rx="35" ry="12"/>
+          <ellipse cx="780" cy="80" rx="55" ry="15"/>
+          <ellipse cx="755" cy="75" rx="32" ry="11"/>
+        </g>
+
+        <!-- TERRASSE / Sol carrelé Memphis -->
+        <rect x="0" y="340" width="1000" height="60" fill="#fff8e7"/>
+        <g stroke="#1a1a2e" stroke-width="2">
+          <line x1="0" y1="340" x2="1000" y2="340"/>
+          <line x1="0" y1="400" x2="1000" y2="400"/>
+        </g>
+        <!-- Motifs sur terrasse -->
+        <g fill="#ff2d95">
+          <circle cx="50" cy="370" r="4"/><circle cx="120" cy="370" r="4"/>
+          <circle cx="850" cy="370" r="4"/><circle cx="920" cy="370" r="4"/>
+        </g>
+        <g fill="#00e5ff">
+          <rect x="180" y="365" width="10" height="10" transform="rotate(45 185 370)"/>
+          <rect x="780" y="365" width="10" height="10" transform="rotate(45 785 370)"/>
+        </g>
+
+        <!-- PISCINE -->
+        <rect x="180" y="400" width="640" height="140" rx="8" fill="#1a1a2e"/>
+        <rect x="190" y="408" width="620" height="124" rx="4" fill="url(#water)"/>
+        <!-- Reflets eau -->
+        <g stroke="#fff8e7" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.6">
+          <path d="M 220 440 Q 250 435 280 440"/>
+          <path d="M 320 460 Q 350 455 380 460"/>
+          <path d="M 450 445 Q 480 440 510 445"/>
+          <path d="M 580 470 Q 610 465 640 470"/>
+          <path d="M 700 450 Q 730 445 760 450"/>
+          <path d="M 240 480 Q 270 475 300 480"/>
+          <path d="M 550 490 Q 580 485 610 490"/>
+        </g>
+
+        <!-- BOUÉE flamant rose -->
+        <g transform="translate(620, 440)">
+          <ellipse cx="40" cy="40" rx="55" ry="22" fill="#ff2d95" stroke="#1a1a2e" stroke-width="3"/>
+          <ellipse cx="40" cy="40" rx="25" ry="10" fill="#00e5ff" stroke="#1a1a2e" stroke-width="2"/>
+          <!-- Cou flamant -->
+          <path d="M 75 32 Q 90 5 80 -5" stroke="#ff2d95" stroke-width="12" fill="none" stroke-linecap="round"/>
+          <path d="M 75 32 Q 90 5 80 -5" stroke="#1a1a2e" stroke-width="2" fill="none"/>
+          <!-- Tête -->
+          <circle cx="80" cy="-8" r="8" fill="#ff2d95" stroke="#1a1a2e" stroke-width="2"/>
+          <!-- Bec -->
+          <polygon points="83,-10 95,-6 83,-3" fill="#ffe600" stroke="#1a1a2e" stroke-width="1.5"/>
+          <circle cx="82" cy="-10" r="1.5" fill="#1a1a2e"/>
+        </g>
+
+        <!-- BOUÉE classique jaune -->
+        <g transform="translate(260, 460)">
+          <ellipse cx="0" cy="0" rx="38" ry="14" fill="#ffe600" stroke="#1a1a2e" stroke-width="3"/>
+          <ellipse cx="0" cy="0" rx="18" ry="6" fill="#00e5ff" stroke="#1a1a2e" stroke-width="2"/>
+          <line x1="-38" y1="0" x2="-22" y2="0" stroke="#ff2d95" stroke-width="4"/>
+          <line x1="22" y1="0" x2="38" y2="0" stroke="#ff2d95" stroke-width="4"/>
+        </g>
+
+        <!-- COPAINS au bord de la piscine - styles 90s simplifiés -->
+        <!-- Couple 1 - gauche -->
+        <g transform="translate(60, 240)">
+          <!-- Homme -->
+          <circle cx="0" cy="0" r="14" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -12 -5 Q 0 -18 12 -5" fill="#c89060" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-4" cy="0" r="1.5" fill="#1a1a2e"/>
+          <circle cx="4" cy="0" r="1.5" fill="#1a1a2e"/>
+          <path d="M -3 7 Q 0 10 3 7" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+          <!-- Maillot couleurs flashy -->
+          <path d="M -15 15 L -18 60 L 18 60 L 15 15 Z" fill="#ff7a00" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -15 25 L 15 25" stroke="#00e5ff" stroke-width="3"/>
+          <path d="M -15 35 L 15 35" stroke="#ffe600" stroke-width="3"/>
+          <!-- Femme à côté -->
+          <g transform="translate(35, 5)">
+            <circle cx="0" cy="0" r="13" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+            <path d="M -13 0 Q -10 -16 0 -16 Q 10 -16 13 0 Q 13 8 8 14 L -8 14 Q -13 8 -13 0 Z" fill="#ffe600" stroke="#1a1a2e" stroke-width="2"/>
+            <circle cx="-4" cy="0" r="1.5" fill="#1a1a2e"/>
+            <circle cx="4" cy="0" r="1.5" fill="#1a1a2e"/>
+            <path d="M -3 6 Q 0 9 3 6" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+            <!-- Robe -->
+            <path d="M -14 14 L -22 55 L 22 55 L 14 14 Z" fill="#ff2d95" stroke="#1a1a2e" stroke-width="2"/>
+            <circle cx="-6" cy="30" r="2" fill="#fff8e7"/>
+            <circle cx="6" cy="35" r="2" fill="#fff8e7"/>
+            <circle cx="0" cy="42" r="2" fill="#fff8e7"/>
+          </g>
+        </g>
+
+        <!-- Couple 2 -->
+        <g transform="translate(200, 250)">
+          <circle cx="0" cy="0" r="14" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -12 -8 Q 0 -16 12 -8 L 12 -3 L -12 -3 Z" fill="#d4a574" stroke="#1a1a2e" stroke-width="2"/>
+          <!-- Lunettes -->
+          <circle cx="-5" cy="1" r="4" fill="none" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="5" cy="1" r="4" fill="none" stroke="#1a1a2e" stroke-width="2"/>
+          <line x1="-1" y1="1" x2="1" y2="1" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -3 8 Q 0 10 3 8" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+          <!-- T-shirt à motif zigzag -->
+          <path d="M -16 15 L -18 55 L 18 55 L 16 15 Z" fill="#00e5ff" stroke="#1a1a2e" stroke-width="2"/>
+          <polyline points="-14,30 -8,25 -2,30 4,25 10,30 14,25" stroke="#1a1a2e" stroke-width="2" fill="none"/>
+          <polyline points="-14,42 -8,37 -2,42 4,37 10,42 14,37" stroke="#ff2d95" stroke-width="2" fill="none"/>
+          <g transform="translate(35, 3)">
+            <circle cx="0" cy="0" r="13" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+            <!-- Chouchou cheveux -->
+            <ellipse cx="0" cy="-12" rx="10" ry="8" fill="#8a2be2" stroke="#1a1a2e" stroke-width="2"/>
+            <path d="M -13 -2 Q -10 -6 0 -6 Q 10 -6 13 -2 Q 13 8 8 13 L -8 13 Q -13 8 -13 -2 Z" fill="#d4a574" stroke="#1a1a2e" stroke-width="2"/>
+            <circle cx="-4" cy="0" r="1.5" fill="#1a1a2e"/>
+            <circle cx="4" cy="0" r="1.5" fill="#1a1a2e"/>
+            <path d="M -3 6 Q 0 9 3 6" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+            <path d="M -14 14 L -20 55 L 20 55 L 14 14 Z" fill="#ffe600" stroke="#1a1a2e" stroke-width="2"/>
+            <!-- Triangles motifs -->
+            <polygon points="-8,25 -3,32 -13,32" fill="#ff2d95"/>
+            <polygon points="8,38 13,45 3,45" fill="#00e5ff"/>
+          </g>
+        </g>
+
+        <!-- Couple 3 -->
+        <g transform="translate(340, 248)">
+          <circle cx="0" cy="0" r="14" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <!-- Casquette -->
+          <path d="M -14 -8 Q 0 -18 14 -8 L 14 -3 L -14 -3 Z" fill="#ff2d95" stroke="#1a1a2e" stroke-width="2"/>
+          <ellipse cx="0" cy="-3" rx="20" ry="3" fill="#ff2d95" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-4" cy="2" r="1.5" fill="#1a1a2e"/>
+          <circle cx="4" cy="2" r="1.5" fill="#1a1a2e"/>
+          <path d="M -3 9 Q 0 12 3 9" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+          <!-- Chemise hawaïenne -->
+          <path d="M -16 15 L -18 55 L 18 55 L 16 15 Z" fill="#fff8e7" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-8" cy="25" r="3" fill="#ff2d95"/>
+          <circle cx="6" cy="30" r="3" fill="#ffe600"/>
+          <circle cx="-2" cy="40" r="3" fill="#00e5ff"/>
+          <circle cx="10" cy="45" r="2.5" fill="#ff7a00"/>
+          <g transform="translate(36, 4)">
+            <circle cx="0" cy="0" r="13" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+            <path d="M -13 -2 Q -10 -16 0 -16 Q 10 -16 13 -2 Q 14 5 12 12 L -12 12 Q -14 5 -13 -2 Z" fill="#c89060" stroke="#1a1a2e" stroke-width="2"/>
+            <circle cx="-4" cy="0" r="1.5" fill="#1a1a2e"/>
+            <circle cx="4" cy="0" r="1.5" fill="#1a1a2e"/>
+            <path d="M -3 6 Q 0 9 3 6" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+            <path d="M -14 13 L -20 55 L 20 55 L 14 13 Z" fill="#00e5ff" stroke="#1a1a2e" stroke-width="2"/>
+            <polyline points="-14,28 -8,23 -2,28 4,23 10,28 14,23" stroke="#fff8e7" stroke-width="2" fill="none"/>
+          </g>
+        </g>
+
+        <!-- Couple 4 - droite -->
+        <g transform="translate(680, 240)">
+          <circle cx="0" cy="0" r="14" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -12 -5 Q 0 -18 12 -5" fill="#d4a574" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-4" cy="0" r="1.5" fill="#1a1a2e"/>
+          <circle cx="4" cy="0" r="1.5" fill="#1a1a2e"/>
+          <path d="M -3 7 Q 0 10 3 7" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+          <!-- Polo -->
+          <path d="M -15 15 L -18 55 L 18 55 L 15 15 Z" fill="#8a2be2" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -8 15 L 0 22 L 8 15" stroke="#1a1a2e" stroke-width="2" fill="none"/>
+          <g transform="translate(35, 5)">
+            <circle cx="0" cy="0" r="13" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+            <!-- Coiffure permanente 90s -->
+            <path d="M -15 -3 Q -16 -18 0 -18 Q 16 -18 15 -3 Q 18 8 10 14 L -10 14 Q -18 8 -15 -3 Z" fill="#e8b870" stroke="#1a1a2e" stroke-width="2"/>
+            <circle cx="-12" cy="-8" r="3" fill="#e8b870" stroke="#1a1a2e" stroke-width="1"/>
+            <circle cx="12" cy="-8" r="3" fill="#e8b870" stroke="#1a1a2e" stroke-width="1"/>
+            <circle cx="-4" cy="0" r="1.5" fill="#1a1a2e"/>
+            <circle cx="4" cy="0" r="1.5" fill="#1a1a2e"/>
+            <path d="M -3 6 Q 0 9 3 6" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+            <path d="M -14 14 L -22 55 L 22 55 L 14 14 Z" fill="#ff7a00" stroke="#1a1a2e" stroke-width="2"/>
+            <circle cx="-6" cy="30" r="2.5" fill="#fff8e7"/>
+            <circle cx="8" cy="38" r="2.5" fill="#fff8e7"/>
+          </g>
+        </g>
+
+        <!-- Couple 5 -->
+        <g transform="translate(820, 250)">
+          <circle cx="0" cy="0" r="14" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -12 -5 Q 0 -16 12 -5" fill="#c89060" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-4" cy="0" r="1.5" fill="#1a1a2e"/>
+          <circle cx="4" cy="0" r="1.5" fill="#1a1a2e"/>
+          <path d="M -4 8 Q 0 11 4 8" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+          <!-- Verre de ricard à la main -->
+          <path d="M -15 15 L -18 55 L 18 55 L 15 15 Z" fill="#ffe600" stroke="#1a1a2e" stroke-width="2"/>
+          <!-- Petit verre -->
+          <rect x="-32" y="22" width="10" height="14" fill="url(#ricardGrad)" stroke="#1a1a2e" stroke-width="1.5"/>
+          <ellipse cx="-27" cy="22" rx="5" ry="1.5" fill="#fff8e7" stroke="#1a1a2e" stroke-width="1"/>
+          <g transform="translate(35, 4)">
+            <circle cx="0" cy="0" r="13" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+            <path d="M -13 0 Q -12 -16 0 -16 Q 12 -16 13 0 Q 13 10 8 14 L -8 14 Q -13 10 -13 0 Z" fill="#b8762d" stroke="#1a1a2e" stroke-width="2"/>
+            <circle cx="-4" cy="0" r="1.5" fill="#1a1a2e"/>
+            <circle cx="4" cy="0" r="1.5" fill="#1a1a2e"/>
+            <path d="M -3 6 Q 0 9 3 6" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+            <path d="M -14 14 L -20 55 L 20 55 L 14 14 Z" fill="#ff2d95" stroke="#1a1a2e" stroke-width="2"/>
+            <path d="M -16 28 L 16 28" stroke="#fff8e7" stroke-width="2"/>
+            <path d="M -16 38 L 16 38" stroke="#ffe600" stroke-width="2"/>
+          </g>
+        </g>
+
+        <!-- ENFANTS dans la piscine - têtes qui dépassent + bras -->
+        <!-- Enfant 1 -->
+        <g transform="translate(220, 430)">
+          <circle cx="0" cy="0" r="10" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -10 -4 Q 0 -14 10 -4" fill="#e8b870" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <circle cx="3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <path d="M -2 5 Q 0 7 2 5" stroke="#1a1a2e" stroke-width="1" fill="none"/>
+        </g>
+        <!-- Enfant 2 -->
+        <g transform="translate(320, 445)">
+          <circle cx="0" cy="0" r="10" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -10 -2 Q -8 -12 0 -12 Q 8 -12 10 -2" fill="#d4a574" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <circle cx="3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <path d="M -2 5 Q 0 8 2 5" stroke="#1a1a2e" stroke-width="1" fill="none"/>
+          <!-- bras qui éclabousse -->
+          <path d="M 8 8 L 18 -2" stroke="#f4c896" stroke-width="4" stroke-linecap="round"/>
+          <!-- éclaboussures -->
+          <circle cx="22" cy="-5" r="2" fill="#fff8e7"/>
+          <circle cx="25" cy="0" r="1.5" fill="#fff8e7"/>
+        </g>
+        <!-- Enfant 3 -->
+        <g transform="translate(400, 435)">
+          <circle cx="0" cy="0" r="10" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -10 -3 Q 0 -13 10 -3" fill="#c89060" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <circle cx="3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <path d="M -2 5 Q 0 7 2 5" stroke="#1a1a2e" stroke-width="1" fill="none"/>
+        </g>
+        <!-- Enfant 4 sur la bouée flamant -->
+        <g transform="translate(660, 472)">
+          <circle cx="0" cy="0" r="10" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -10 -3 Q -8 -13 0 -13 Q 8 -13 10 -3" fill="#ffe600" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <circle cx="3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <path d="M -3 5 Q 0 8 3 5" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+          <!-- Bras levés YEAH -->
+          <path d="M -8 5 L -18 -10" stroke="#f4c896" stroke-width="4" stroke-linecap="round"/>
+          <path d="M 8 5 L 18 -10" stroke="#f4c896" stroke-width="4" stroke-linecap="round"/>
+        </g>
+        <!-- Enfant 5 -->
+        <g transform="translate(510, 450)">
+          <circle cx="0" cy="0" r="10" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -10 -3 Q 0 -13 10 -3" fill="#c89060" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <circle cx="3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <path d="M -2 5 Q 0 7 2 5" stroke="#1a1a2e" stroke-width="1" fill="none"/>
+        </g>
+        <!-- Enfant 6 -->
+        <g transform="translate(560, 438)">
+          <circle cx="0" cy="0" r="10" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -10 -2 Q -8 -12 0 -12 Q 8 -12 10 -2" fill="#e8b870" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <circle cx="3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <path d="M -2 5 Q 0 7 2 5" stroke="#1a1a2e" stroke-width="1" fill="none"/>
+        </g>
+        <!-- Enfant 7 dans la bouée jaune -->
+        <g transform="translate(260, 455)">
+          <circle cx="0" cy="0" r="10" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -10 -3 Q 0 -13 10 -3" fill="#c89060" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <circle cx="3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <path d="M -3 5 Q 0 8 3 5" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+        </g>
+        <!-- Enfant 8 -->
+        <g transform="translate(720, 445)">
+          <circle cx="0" cy="0" r="10" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -10 -3 Q 0 -13 10 -3" fill="#d4a574" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <circle cx="3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <path d="M -2 5 Q 0 7 2 5" stroke="#1a1a2e" stroke-width="1" fill="none"/>
+          <path d="M 8 6 L 16 14" stroke="#f4c896" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="20" cy="18" r="2" fill="#fff8e7"/>
+        </g>
+        <!-- Enfant 9 -->
+        <g transform="translate(770, 460)">
+          <circle cx="0" cy="0" r="10" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -10 -2 Q -8 -12 0 -12 Q 8 -12 10 -2" fill="#b8762d" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <circle cx="3" cy="0" r="1.2" fill="#1a1a2e"/>
+          <path d="M -2 5 Q 0 8 2 5" stroke="#1a1a2e" stroke-width="1" fill="none"/>
+        </g>
+        <!-- Enfant 10 bord terrasse -->
+        <g transform="translate(150, 320)">
+          <circle cx="0" cy="0" r="11" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -11 -3 Q 0 -14 11 -3" fill="#c89060" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-3" cy="0" r="1.3" fill="#1a1a2e"/>
+          <circle cx="3" cy="0" r="1.3" fill="#1a1a2e"/>
+          <path d="M -3 6 Q 0 9 3 6" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+          <!-- Mini t-shirt -->
+          <path d="M -10 11 L -12 35 L 12 35 L 10 11 Z" fill="#ff2d95" stroke="#1a1a2e" stroke-width="1.5"/>
+        </g>
+        <!-- Enfant 11 -->
+        <g transform="translate(470, 320)">
+          <circle cx="0" cy="0" r="11" fill="#f4c896" stroke="#1a1a2e" stroke-width="2"/>
+          <path d="M -11 -2 Q -9 -14 0 -14 Q 9 -14 11 -2" fill="#ffe600" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="-3" cy="0" r="1.3" fill="#1a1a2e"/>
+          <circle cx="3" cy="0" r="1.3" fill="#1a1a2e"/>
+          <path d="M -3 6 Q 0 9 3 6" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+          <path d="M -10 11 L -12 35 L 12 35 L 10 11 Z" fill="#00e5ff" stroke="#1a1a2e" stroke-width="1.5"/>
+          <polygon points="0,20 -5,28 5,28" fill="#1a1a2e"/>
+        </g>
+
+        <!-- TABLE AVEC RICARD -->
+        <g transform="translate(890, 310)">
+          <!-- Table -->
+          <rect x="-40" y="0" width="80" height="6" fill="#1a1a2e"/>
+          <line x1="-30" y1="6" x2="-30" y2="30" stroke="#1a1a2e" stroke-width="4"/>
+          <line x1="30" y1="6" x2="30" y2="30" stroke="#1a1a2e" stroke-width="4"/>
+          <!-- Bouteille de Ricard - jaune -->
+          <rect x="-8" y="-50" width="16" height="50" fill="#f4d03f" stroke="#1a1a2e" stroke-width="2" rx="2"/>
+          <rect x="-8" y="-50" width="16" height="8" fill="#1a1a2e"/>
+          <!-- Étiquette -->
+          <rect x="-10" y="-30" width="20" height="18" fill="#fff8e7" stroke="#1a1a2e" stroke-width="1.5"/>
+          <text x="0" y="-22" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="6" font-weight="bold" fill="#ff2d95">RICARD</text>
+          <text x="0" y="-15" text-anchor="middle" font-family="Arial, sans-serif" font-size="3.5" fill="#1a1a2e">45°</text>
+          <!-- Verre à côté -->
+          <rect x="-35" y="-18" width="14" height="18" fill="url(#ricardGrad)" stroke="#1a1a2e" stroke-width="1.5"/>
+          <ellipse cx="-28" cy="-18" rx="7" ry="2" fill="#fff8e7" stroke="#1a1a2e" stroke-width="1"/>
+          <!-- glaçons -->
+          <rect x="-32" y="-15" width="3" height="3" fill="#fff8e7" stroke="#1a1a2e" stroke-width="0.5" transform="rotate(15 -30.5 -13.5)"/>
+          <rect x="-26" y="-12" width="3" height="3" fill="#fff8e7" stroke="#1a1a2e" stroke-width="0.5"/>
+          <!-- Pichet d'eau -->
+          <path d="M 18 -15 L 18 -2 Q 18 2 22 2 L 32 2 Q 36 2 36 -2 L 36 -15 Z" fill="#00e5ff" opacity="0.7" stroke="#1a1a2e" stroke-width="1.5"/>
+          <path d="M 36 -10 Q 40 -10 40 -8 L 38 -6" stroke="#1a1a2e" stroke-width="1.5" fill="none"/>
+        </g>
+
+        <!-- TEXTE 90S au sommet -->
+        <g transform="translate(500, 50)">
+          <text x="0" y="0" text-anchor="middle" font-family="Bungee, cursive" font-size="22" fill="#1a1a2e" stroke="#fff8e7" stroke-width="3" paint-order="stroke">★ TCHIN TCHIN ★</text>
+        </g>
+
+        <!-- Étoiles décor -->
+        <g fill="#ffe600" stroke="#1a1a2e" stroke-width="1.5">
+          <polygon points="50,60 53,68 61,68 55,73 57,81 50,76 43,81 45,73 39,68 47,68"/>
+          <polygon points="950,120 953,128 961,128 955,133 957,141 950,136 943,141 945,133 939,128 947,128"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- CARTE INFO -->
+  <div class="info-card">
+    <div class="card">
+      <div class="crew" style="grid-template-columns: repeat(3, 1fr); margin-top: 10px;">
+        <div class="crew-item">
+          <span class="crew-num">5</span>
+          <span class="crew-label">Couples<br>au top</span>
+        </div>
+        <div class="crew-item">
+          <span class="crew-num">11</span>
+          <span class="crew-label">Mômes<br>déchaînés</span>
+        </div>
+        <div class="crew-item">
+          <span class="crew-num">1</span>
+          <span class="crew-label">Piscine<br>fraîche</span>
+        </div>
+        <div class="crew-item">
+          <span class="crew-num">∞</span>
+          <span class="crew-label">Non stop<br>apéro</span>
+        </div>
+        <div class="crew-item">
+          <span class="crew-num">🎧</span>
+          <span class="crew-label">DJ set by<br>La Machina</span>
+        </div>
+        <div class="crew-item">
+          <span class="crew-num">🥩</span>
+          <span class="crew-label">Viande de<br>qualité au menu</span>
+        </div>
+      </div>
+      <p style="margin-top: 25px; font-size: 1.05rem; line-height: 1.6; text-align: center; font-weight: 700;">
+        <strong>Rendez-vous vendredi 22 mai à 20H pétantes</strong>.<br>
+        <span style="color: var(--hot-pink);">Ne faites pas comme Raph, prenez le bon chemin pour venir 🗺️</span>
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-stamp">★ 1 RICARD = 5 VOLUMES D'EAU ★</div>
+    <p class="small-print">À consommer avec modération · entre copains uniquement · 2026</p>
+  </footer>
+
+<script>
+  const target = new Date("2026-05-22T20:00:00+02:00").getTime();
+
+  function tick() {
+    const now = Date.now();
+    const diff = target - now;
+
+    if (diff <= 0) {
+      document.body.classList.add('party-mode');
+      document.getElementById('days').textContent = '00';
+      document.getElementById('hours').textContent = '00';
+      document.getElementById('minutes').textContent = '00';
+      document.getElementById('seconds').textContent = '00';
+      return;
+    }
+
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    document.getElementById('days').textContent = String(d).padStart(2, '0');
+    document.getElementById('hours').textContent = String(h).padStart(2, '0');
+    document.getElementById('minutes').textContent = String(m).padStart(2, '0');
+    document.getElementById('seconds').textContent = String(s).padStart(2, '0');
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>
+
+</body>
+</html>
